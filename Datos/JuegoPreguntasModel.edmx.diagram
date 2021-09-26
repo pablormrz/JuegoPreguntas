@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6f6d1c98445e433ba5818e171d9a5671" Name="Diagram1">
+        <EntityTypeShape EntityType="JuegoPreguntasModel.Categoria" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="JuegoPreguntasModel.Historial" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="JuegoPreguntasModel.Pregunta" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="JuegoPreguntasModel.Respuestas" Width="1.5" PointX="5.25" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="JuegoPreguntasModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="JuegoPreguntasModel.FK__Pregunta__NumCat__3A81B327" ManuallyRouted="false" />
+        <AssociationConnector Association="JuegoPreguntasModel.FK__Respuesta__IdPre__3D5E1FD2" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="JuegoPreguntasModel.premio" Width="1.5" PointX="3" PointY="7.125" />
+        <AssociationConnector Association="JuegoPreguntasModel.FK__premio__IdCatego__46E78A0C" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

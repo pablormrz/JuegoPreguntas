@@ -1,0 +1,328 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="JuegoPreguntasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="NumeroCategoria" />
+          </Key>
+          <Property Name="NumeroCategoria" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Historial">
+          <Key>
+            <PropertyRef Name="IdInicio" />
+          </Key>
+          <Property Name="IdInicio" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreParticipante" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RondaAlcanzada" Type="int" Nullable="false" />
+          <Property Name="PremioConseguido" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="RetiroVoluntario" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pregunta">
+          <Key>
+            <PropertyRef Name="IdPregunta" />
+          </Key>
+          <Property Name="IdPregunta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TextoPregunta" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="NumCategoria" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'dboChallenge.dbo.premio' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="premio">
+          <Key>
+            <PropertyRef Name="IdPremio" />
+            <PropertyRef Name="Puntos" />
+          </Key>
+          <Property Name="IdPremio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Puntos" Type="int" Nullable="false" />
+          <Property Name="IdCategotia" Type="int" />
+        </EntityType>
+        <EntityType Name="Respuestas">
+          <Key>
+            <PropertyRef Name="IdRespuesta" />
+          </Key>
+          <Property Name="IdRespuesta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TextoRespuesta" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="IdPregunta" Type="int" Nullable="false" />
+          <Property Name="Correcta" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK__Pregunta__NumCat__3A81B327">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="1" />
+          <End Role="Pregunta" Type="Self.Pregunta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="NumeroCategoria" />
+            </Principal>
+            <Dependent Role="Pregunta">
+              <PropertyRef Name="NumCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__premio__IdCatego__46E78A0C">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="0..1" />
+          <End Role="premio" Type="Self.premio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="NumeroCategoria" />
+            </Principal>
+            <Dependent Role="premio">
+              <PropertyRef Name="IdCategotia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Respuesta__IdPre__3D5E1FD2">
+          <End Role="Pregunta" Type="Self.Pregunta" Multiplicity="1" />
+          <End Role="Respuestas" Type="Self.Respuestas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pregunta">
+              <PropertyRef Name="IdPregunta" />
+            </Principal>
+            <Dependent Role="Respuestas">
+              <PropertyRef Name="IdPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JuegoPreguntasModelStoreContainer">
+          <EntitySet Name="Categoria" EntityType="Self.Categoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Historial" EntityType="Self.Historial" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pregunta" EntityType="Self.Pregunta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Respuestas" EntityType="Self.Respuestas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="premio" EntityType="Self.premio" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [premio].[IdPremio] AS [IdPremio], 
+    [premio].[Puntos] AS [Puntos], 
+    [premio].[IdCategotia] AS [IdCategotia]
+    FROM [dbo].[premio] AS [premio]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Pregunta__NumCat__3A81B327" Association="Self.FK__Pregunta__NumCat__3A81B327">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="Pregunta" EntitySet="Pregunta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__premio__IdCatego__46E78A0C" Association="Self.FK__premio__IdCatego__46E78A0C">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="premio" EntitySet="premio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Respuesta__IdPre__3D5E1FD2" Association="Self.FK__Respuesta__IdPre__3D5E1FD2">
+            <End Role="Pregunta" EntitySet="Pregunta" />
+            <End Role="Respuestas" EntitySet="Respuestas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="JuegoPreguntasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="NumeroCategoria" />
+          </Key>
+          <Property Name="NumeroCategoria" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Pregunta" Relationship="Self.FK__Pregunta__NumCat__3A81B327" FromRole="Categoria" ToRole="Pregunta" />
+          <NavigationProperty Name="premio" Relationship="JuegoPreguntasModel.FK__premio__IdCatego__46E78A0C" FromRole="Categoria" ToRole="premio" />
+        </EntityType>
+        <EntityType Name="Historial">
+          <Key>
+            <PropertyRef Name="IdInicio" />
+          </Key>
+          <Property Name="IdInicio" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreParticipante" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RondaAlcanzada" Type="Int32" Nullable="false" />
+          <Property Name="PremioConseguido" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="RetiroVoluntario" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pregunta">
+          <Key>
+            <PropertyRef Name="IdPregunta" />
+          </Key>
+          <Property Name="IdPregunta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TextoPregunta" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NumCategoria" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Categoria" Relationship="Self.FK__Pregunta__NumCat__3A81B327" FromRole="Pregunta" ToRole="Categoria" />
+          <NavigationProperty Name="Respuestas" Relationship="Self.FK__Respuesta__IdPre__3D5E1FD2" FromRole="Pregunta" ToRole="Respuestas" />
+        </EntityType>
+        <EntityType Name="Respuestas">
+          <Key>
+            <PropertyRef Name="IdRespuesta" />
+          </Key>
+          <Property Name="IdRespuesta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TextoRespuesta" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdPregunta" Type="Int32" Nullable="false" />
+          <Property Name="Correcta" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Pregunta" Relationship="Self.FK__Respuesta__IdPre__3D5E1FD2" FromRole="Respuestas" ToRole="Pregunta" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK__Pregunta__NumCat__3A81B327">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="1" />
+          <End Role="Pregunta" Type="Self.Pregunta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="NumeroCategoria" />
+            </Principal>
+            <Dependent Role="Pregunta">
+              <PropertyRef Name="NumCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Respuesta__IdPre__3D5E1FD2">
+          <End Role="Pregunta" Type="Self.Pregunta" Multiplicity="1" />
+          <End Role="Respuestas" Type="Self.Respuestas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pregunta">
+              <PropertyRef Name="IdPregunta" />
+            </Principal>
+            <Dependent Role="Respuestas">
+              <PropertyRef Name="IdPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JuegoPreguntasEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categoria" EntityType="Self.Categoria" />
+          <EntitySet Name="Historial" EntityType="Self.Historial" />
+          <EntitySet Name="Pregunta" EntityType="Self.Pregunta" />
+          <EntitySet Name="Respuestas" EntityType="Self.Respuestas" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK__Pregunta__NumCat__3A81B327" Association="Self.FK__Pregunta__NumCat__3A81B327">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="Pregunta" EntitySet="Pregunta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Respuesta__IdPre__3D5E1FD2" Association="Self.FK__Respuesta__IdPre__3D5E1FD2">
+            <End Role="Pregunta" EntitySet="Pregunta" />
+            <End Role="Respuestas" EntitySet="Respuestas" />
+          </AssociationSet>
+          <EntitySet Name="premio" EntityType="JuegoPreguntasModel.premio" />
+          <AssociationSet Name="FK__premio__IdCatego__46E78A0C" Association="JuegoPreguntasModel.FK__premio__IdCatego__46E78A0C">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="premio" EntitySet="premio" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="premio">
+          <Key>
+            <PropertyRef Name="IdPremio" />
+            <PropertyRef Name="Puntos" />
+          </Key>
+          <Property Name="IdPremio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Puntos" Type="Int32" Nullable="false" />
+          <Property Name="IdCategotia" Type="Int32" />
+          <NavigationProperty Name="Categoria" Relationship="JuegoPreguntasModel.FK__premio__IdCatego__46E78A0C" FromRole="premio" ToRole="Categoria" />
+        </EntityType>
+        <Association Name="FK__premio__IdCatego__46E78A0C">
+          <End Type="JuegoPreguntasModel.Categoria" Role="Categoria" Multiplicity="0..1" />
+          <End Type="JuegoPreguntasModel.premio" Role="premio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="NumeroCategoria" />
+            </Principal>
+            <Dependent Role="premio">
+              <PropertyRef Name="IdCategotia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="JuegoPreguntasModelStoreContainer" CdmEntityContainer="JuegoPreguntasEntities">
+          <EntitySetMapping Name="Categoria">
+            <EntityTypeMapping TypeName="JuegoPreguntasModel.Categoria">
+              <MappingFragment StoreEntitySet="Categoria">
+                <ScalarProperty Name="NumeroCategoria" ColumnName="NumeroCategoria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Historial">
+            <EntityTypeMapping TypeName="JuegoPreguntasModel.Historial">
+              <MappingFragment StoreEntitySet="Historial">
+                <ScalarProperty Name="IdInicio" ColumnName="IdInicio" />
+                <ScalarProperty Name="NombreParticipante" ColumnName="NombreParticipante" />
+                <ScalarProperty Name="RondaAlcanzada" ColumnName="RondaAlcanzada" />
+                <ScalarProperty Name="PremioConseguido" ColumnName="PremioConseguido" />
+                <ScalarProperty Name="RetiroVoluntario" ColumnName="RetiroVoluntario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pregunta">
+            <EntityTypeMapping TypeName="JuegoPreguntasModel.Pregunta">
+              <MappingFragment StoreEntitySet="Pregunta">
+                <ScalarProperty Name="IdPregunta" ColumnName="IdPregunta" />
+                <ScalarProperty Name="TextoPregunta" ColumnName="TextoPregunta" />
+                <ScalarProperty Name="NumCategoria" ColumnName="NumCategoria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Respuestas">
+            <EntityTypeMapping TypeName="JuegoPreguntasModel.Respuestas">
+              <MappingFragment StoreEntitySet="Respuestas">
+                <ScalarProperty Name="IdRespuesta" ColumnName="IdRespuesta" />
+                <ScalarProperty Name="TextoRespuesta" ColumnName="TextoRespuesta" />
+                <ScalarProperty Name="IdPregunta" ColumnName="IdPregunta" />
+                <ScalarProperty Name="Correcta" ColumnName="Correcta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="JuegoPreguntasModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="premio">
+            <EntityTypeMapping TypeName="JuegoPreguntasModel.premio">
+              <MappingFragment StoreEntitySet="premio">
+                <ScalarProperty Name="IdCategotia" ColumnName="IdCategotia" />
+                <ScalarProperty Name="Puntos" ColumnName="Puntos" />
+                <ScalarProperty Name="IdPremio" ColumnName="IdPremio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
